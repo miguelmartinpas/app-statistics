@@ -1,0 +1,19 @@
+# pull official base image
+FROM node:12.20.1
+
+# set working directory
+WORKDIR /client
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /client/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY app/package.json ./
+COPY app/package-lock.json ./
+RUN npm install --silent
+
+# add client
+COPY ./app ./
+
+# start client
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/client
+      - "/client/node_modules"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.4
+
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server:/server
+      - "/server/node_modules"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: whatsapp_statistics
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    command: --init-file /data/application/init.sql
+    volumes:
+      - .dbdata:/var/lib/mysql
+      - ./server/data/init.sql:/data/application/init.sql
+    ports:
+      - 3306:3306
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

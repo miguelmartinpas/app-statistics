@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/server
+      - "/server/node_modules"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: whatsapp_statistics
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      command: --init-file /data/application/init.sql
+      volumes:
+        - .dbdata:/var/lib/mysql
+        - ./data/init.sql:/data/application/init.sql
+    ports:
+      - 3306:3306
