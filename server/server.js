@@ -11,6 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/channels", channels.index);
+app.get("/channels/store", channels.store);
 
 app.listen(port, hostname, () => {
   console.log(`Running server at http://${hostname}:${port}`);

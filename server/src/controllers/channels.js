@@ -1,34 +1,24 @@
-const mysql = require("mysql2");
+const dbClient = require("../services/DbClient");
 
 class Channels {
-  constructor() {
-    this.pool = mysql.createPool({
-      host: "10.5.0.6",
-      user: "root",
-      password: "root",
-      database: "whatsapp_statistics",
-      port: 3306,
-    });
-
-    this.promisePool = this.pool.promise();
-  }
-
   index = async (req, res) => {
-    const [rows, fields] = await this.promisePool.query(
-      "SELECT * FROM messages"
+    const response = await dbClient.query("SELECT * FROM messages");
+
+    return res.json({
+      method: "get",
+      rows: response.rows,
+    });
+  };
+
+  store = async (req, res) => {
+    const response = await dbClient.insert(
+      "INSERT INTO messages VALUES (NULL, 'channel1', 'user4', 'text 1', NULL);"
     );
 
-    console.log("rows", rows);
     return res.json({
-      get: "get",
-      rows,
+      method: "put",
+      response,
     });
-
-    // await connection.commit()
-    // await connection.end()
-
-    // await connection.rollback()
-    // await connection.end()
   };
 }
 

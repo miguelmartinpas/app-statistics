@@ -38,12 +38,15 @@ http://localhost:3001
 
 # Mysql user for Docker machine
 
-    connection on: localhost:3306
-
-    MYSQL_DATABASE: whatsapp_statistics
+    MYSQL_DATABASE: -
     MYSQL_USER: root
     MYSQL_PASSWORD: root
-    MYSQL_ROOT_PASSWORD: root
+
+    External connection on: localhost:3306
+
+    MYSQL_DATABASE: "whatsapp_statistics"
+    MYSQL_USER: "whatsapp_user"
+    MYSQL_PASSWORD: "whatsapp_user00"
 
 # get Mysql host
 
