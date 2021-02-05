@@ -2,6 +2,16 @@
 
 node: 14
 
+# Global install
+
+- preact cli
+
+```sh
+npm install -g preact-cli
+```
+
+- Install Docker
+
 # Docker commands
 
 ```sh
